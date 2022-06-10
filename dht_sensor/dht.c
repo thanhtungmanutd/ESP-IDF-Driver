@@ -22,31 +22,35 @@ static gpio_num_t dht_pin;
 
 /***************************************************************************//**
  * @brief
- *   Send request signal to DHT sensor
+ *  Send request signal to DHT sensor.
  *
  ******************************************************************************/
 static void send_request(void);
 
 /***************************************************************************//**
  * @brief
- *   Wait for the response from the DHT sensor
+ *  Wait for the response from the DHT sensor.
  *
  ******************************************************************************/
 static void wait_response(void);
 
 /***************************************************************************//**
  * @brief
- *   Read one byte from DHT sensor
+ *  Read one byte from DHT sensor.
  *
  * @return
- *   Return value is a byte of data
- * 
+ *  Return value is a byte of data.
+ *
  ******************************************************************************/
 static uint8_t dht_read_byte(void);
 
 // -----------------------------------------------------------------------------
 //                       Local Function Definitions
 // -----------------------------------------------------------------------------
+
+/***************************************************************************//**
+ *  Send request signal to DHT sensor.
+ ******************************************************************************/
 static void send_request(void)
 {
     gpio_set_direction(dht_pin,GPIO_MODE_OUTPUT);
@@ -63,6 +67,9 @@ static void send_request(void)
     ets_delay_us(30);
 }
 
+/***************************************************************************//**
+ *  Wait for the response from the DHT sensor.
+ ******************************************************************************/
 static void wait_response(void)
 {
     gpio_set_direction(dht_pin,GPIO_MODE_INPUT);
@@ -70,6 +77,9 @@ static void wait_response(void)
     while(gpio_get_level(dht_pin));
 }
 
+/***************************************************************************//**
+ *  Read one byte from DHT sensor.
+ ******************************************************************************/
 static uint8_t dht_read_byte(void)
 {
     uint8_t value = 0;
@@ -90,12 +100,18 @@ static uint8_t dht_read_byte(void)
 //                       Public Function Definitions
 // -----------------------------------------------------------------------------
 
+/***************************************************************************//**
+ *  Initialize the configuration for the DHT sensor.
+ ******************************************************************************/
 void dht_init(dht_type_t type,gpio_num_t pin)
 {
     dht_type = type;
     dht_pin  = pin;
 }
 
+/***************************************************************************//**
+ *  Read the humidity and temperature from the sensor.
+ ******************************************************************************/
 dht_data_type_t dht_read(void)
 {
     dht_data_type_t value;

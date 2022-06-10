@@ -30,23 +30,23 @@ typedef struct
 
 /***************************************************************************//**
  * @brief
- *    This function initialize the configuration for the DHT sensor
+ *  This function initialize the configuration for the DHT sensor.
  *
  * @param type
- *  The type of DHT sensor. It can be DHT11 or DHT22
+ *  The type of DHT sensor. It can be DHT11 or DHT22.
  * @param pin
- *  The GPIO pin that connected to the data pin of the sensor
+ *  The GPIO pin that connected to the data pin of the sensor.
  *
  ******************************************************************************/
 void dht_init(dht_type_t type,gpio_num_t pin);
 
 /***************************************************************************//**
  * @brief
- *    This function read the humidity and temperature from the sensor
+ *  This function read the humidity and temperature from the sensor.
  *
  * @return
- *   Return value is a struct that containing humidity and temperature
- * 
+ *  Return value is a struct that containing humidity and temperature.
+ *
  ******************************************************************************/
 dht_data_type_t dht_read(void);
 

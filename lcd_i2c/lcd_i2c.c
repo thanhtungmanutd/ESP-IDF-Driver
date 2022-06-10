@@ -3,6 +3,7 @@
 // -----------------------------------------------------------------------------
 
 #include <stdio.h>
+#include <stdint.h>
 #include <string.h>
 #include "esp32/rom/ets_sys.h"
 #include "driver/gpio.h"
@@ -19,16 +20,6 @@
 static const char *TAG_ERROR = "error: ";
 static const char *TAG_INFO = "";
 
-/* configuration for i2c master */
-static i2c_config_t conf = {
-    .mode = I2C_MODE_MASTER,
-    .scl_io_num = SCL_PIN,
-    .sda_io_num = SDA_PIN,
-    .scl_pullup_en = GPIO_PULLUP_ENABLE,
-    .sda_pullup_en = GPIO_PULLUP_ENABLE,
-    .master.clk_speed = I2C_FREQ
-};
-
 static lcd_typedef_t lcd_obj;
 
 // -----------------------------------------------------------------------------
@@ -37,53 +28,50 @@ static lcd_typedef_t lcd_obj;
 
 /***************************************************************************//**
  * @brief
- *   Send one data byte to slave
+ *  Send one data byte to slave.
  *
  * @param data
- *   Data sent to slave by master
+ *  Data sent to slave by master.
  *
  * @return
- *   Return value is ESP_OK or ESP_FAIL
+ *  Return value is ESP_OK or ESP_FAIL.
+ *
  ******************************************************************************/
 static esp_err_t i2c_write_byte(uint8_t data);
 
 /***************************************************************************//**
  * @brief
- *   Clock data into the Liquid Crystal Display
+ *  Clock data into the Liquid Crystal Display.
  *
  * @param data
- *   Data clocked into the Liquid Crystal Display
+ *  Data clocked into the Liquid Crystal Display.
  *
  * @return
- *   Return value is ESP_OK or ESP_FAIL
+ *  Return value is ESP_OK or ESP_FAIL.
+ *
  ******************************************************************************/
 static esp_err_t lcd_i2c_pulse_enable(uint8_t data);
 
 /***************************************************************************//**
  * @brief
- *   Send 4 bits of data to Liquid Crystal Display
+ *  Send 4 bits of data to Liquid Crystal Display.
  *
  * @param data
- *   Data clocked into the Liquid Crystal Display
+ *  Data clocked into the Liquid Crystal Display.
  *
  * @return
- *   Return value is ESP_OK or ESP_FAIL
+ *  Return value is ESP_OK or ESP_FAIL.
+ *
  ******************************************************************************/
 static esp_err_t lcd_i2c_write_4_bits(uint8_t data);
-
-/***************************************************************************//**
- * @brief
- *  This function initialize the configuration for I2C Master
- *
- * @return
- *  Return ESP_OK or ESP_FAIL
- ******************************************************************************/
-static esp_err_t i2c_master_init();
 
 // -----------------------------------------------------------------------------
 //                       Public Function Definitions
 // -----------------------------------------------------------------------------
 
+/***************************************************************************//**
+ *  Send command to Liquid Crystal Display
+ ******************************************************************************/
 esp_err_t lcd_i2c_write_cmd(uint8_t cmd)
 {
     uint8_t high_nib = 0u;
@@ -102,19 +90,14 @@ esp_err_t lcd_i2c_write_cmd(uint8_t cmd)
     return ESP_OK;
 }
 
-
+/***************************************************************************//**
+ *  Initialize the configuration for Liquid Crystal Display.
+ ******************************************************************************/
 esp_err_t lcd_i2c_init(lcd_typedef_t lcd)
 {
     uint8_t check = 0u;
 
     lcd_obj = lcd;
-    if(i2c_master_init() != ESP_OK) {
-        ESP_LOGE(TAG_ERROR,"init i2c failed");
-        check++;
-    }
-    else
-        ESP_LOGI(TAG_INFO,"i2c master init done");
-
     vTaskDelay(pdMS_TO_TICKS(50));
     if(i2c_write_byte(0x00) != ESP_OK) {
         ESP_LOGE(TAG_ERROR,"fail to send 0x00");
@@ -169,6 +152,9 @@ esp_err_t lcd_i2c_init(lcd_typedef_t lcd)
         return ESP_FAIL;
 }
 
+/***************************************************************************//**
+ *  Send a character to Liquid Crystal Display.
+ ******************************************************************************/
 esp_err_t lcd_i2c_write_char(char character)
 {
     uint8_t high_nib = 0u;
@@ -188,6 +174,9 @@ esp_err_t lcd_i2c_write_char(char character)
     return ESP_OK;
 }
 
+/***************************************************************************//**
+ *  Send a string to Liquid Crystal Display.
+ ******************************************************************************/
 esp_err_t lcd_i2c_write_str(char *str)
 {
     esp_err_t ret = ESP_OK;
@@ -203,6 +192,9 @@ esp_err_t lcd_i2c_write_str(char *str)
     return ESP_OK;
 }
 
+/***************************************************************************//**
+ *  Set the position of the cursor.
+ ******************************************************************************/
 esp_err_t lcd_i2c_set_cursor(uint8_t row, uint8_t col)
 {
     uint8_t cmd = 0u;
@@ -223,17 +215,9 @@ esp_err_t lcd_i2c_set_cursor(uint8_t row, uint8_t col)
 //                       Local Function Definitions
 // -----------------------------------------------------------------------------
 
-static esp_err_t i2c_master_init(void)
-{
-    esp_err_t status = ESP_OK;
-
-    /* install i2c driver*/
-    i2c_param_config(I2C_DEV, &conf);
-    status = i2c_driver_install(I2C_DEV, conf.mode, 0, 0, 0);
-
-    return status;
-}
-
+/***************************************************************************//**
+ *  Send one data byte to slave.
+ ******************************************************************************/
 static esp_err_t i2c_write_byte(uint8_t data)
 {
     esp_err_t status;
@@ -249,6 +233,9 @@ static esp_err_t i2c_write_byte(uint8_t data)
     return status;
 }
 
+/***************************************************************************//**
+ *  Clock data into the Liquid Crystal Display.
+ ******************************************************************************/
 static esp_err_t lcd_i2c_pulse_enable(uint8_t data)
 {
     if(i2c_write_byte(data | EN) != ESP_OK)
@@ -261,6 +248,9 @@ static esp_err_t lcd_i2c_pulse_enable(uint8_t data)
     return ESP_OK;
 }
 
+/***************************************************************************//**
+ *  Send 4 bits of data to Liquid Crystal Display.
+ ******************************************************************************/
 static esp_err_t lcd_i2c_write_4_bits(uint8_t data)
 {
     if(i2c_write_byte(data) != ESP_OK)

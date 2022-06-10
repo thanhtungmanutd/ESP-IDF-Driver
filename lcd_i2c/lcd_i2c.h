@@ -24,8 +24,6 @@ typedef enum {
 #define DEV_ADDRR                 0x27
 #define I2C_NUM(x)                I2C_NUM_##x
 #define I2C_DEV                   I2C_NUM(0)
-#define SCL_PIN                   GPIO_NUM_17
-#define SDA_PIN                   GPIO_NUM_16
 #define I2C_FREQ                  1000000
 #define RD_BIT                    0x01
 #define WR_BIT                    0x00
@@ -85,67 +83,67 @@ typedef enum {
 
 /***************************************************************************//**
  * @brief
- *  This function initialize the configuration for Liquid Crystal Display
+ *  This function initialize the configuration for Liquid Crystal Display.
  *
  * @param lcd
- *  Type of Liquid Crystal Display (rows and cols)
+ *  Type of Liquid Crystal Display (rows and cols).
  *
  * @return
- *  Return ESP_OK or ESP_FAIL
+ *  Return ESP_OK or ESP_FAIL.
  *
  ******************************************************************************/
 esp_err_t lcd_i2c_init(lcd_typedef_t lcd);
 
 /***************************************************************************//**
  * @brief
- *  This function send command to Liquid Crystal Display
+ *  This function send command to Liquid Crystal Display.
  *
  * @param cmd
- *  Command send to Liquid Crystal Display
+ *  Command send to Liquid Crystal Display.
  *
  * @return
- *  Return ESP_OK or ESP_FAIL
+ *  Return ESP_OK or ESP_FAIL.
  *
  ******************************************************************************/
 esp_err_t lcd_i2c_write_cmd(uint8_t cmd);
 
 /***************************************************************************//**
  * @brief
- *  This function send a character to Liquid Crystal Display
+ *  This function send a character to Liquid Crystal Display.
  *
  * @param character
- *  Character send to Liquid Crystal Display
+ *  Character send to Liquid Crystal Display.
  *
  * @return
- *  Return ESP_OK or ESP_FAIL
+ *  Return ESP_OK or ESP_FAIL.
  *
  ******************************************************************************/
 esp_err_t lcd_i2c_write_char(char character);
 
 /***************************************************************************//**
  * @brief
- *  This function send a string to Liquid Crystal Display
+ *  This function send a string to Liquid Crystal Display.
  *
  * @param str
- *  Pointer to the string send to Liquid Crystal Display
+ *  Pointer to the string send to Liquid Crystal Display.
  *
  * @return
- *  Return ESP_OK or ESP_FAIL
+ *  Return ESP_OK or ESP_FAIL.
  *
  ******************************************************************************/
 esp_err_t lcd_i2c_write_str(char *str);
 
 /***************************************************************************//**
  * @brief
- *  This function set the position of the cursor
+ *  This function set the position of the cursor.
  *
  * @param row
- *  The line that want to set the cursor
+ *  The line that want to set the cursor.
  * @param col
- *  The column that want to set the cursor
+ *  The column that want to set the cursor.
  *
  * @return
- *  Return ESP_OK or ESP_FAIL
+ *  Return ESP_OK or ESP_FAIL.
  *
  ******************************************************************************/
 esp_err_t lcd_i2c_set_cursor(uint8_t row, uint8_t col);
