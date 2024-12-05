@@ -1,0 +1,7 @@
+{
+  "files.associations": {
+    "tcp_server.h": "c",
+    "unistd.h": "c",
+    "fpu_control.h": "c"
+  }
+}
